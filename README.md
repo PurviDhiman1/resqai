@@ -1,16 +1,108 @@
-# React + Vite
+# ResQAI — AI-Powered Disaster Response Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+ResQAI is an AI-powered disaster reporting and emergency response system designed to help citizens report incidents and enable authorities to respond faster using intelligent prioritization.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🚨 Problem
 
-## React Compiler
+During disasters:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+* Reports are scattered and duplicated
+* No system verifies authenticity
+* Emergency response is delayed
+* Authorities lack real-time insights
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 💡 Solution
+
+ResQAI converts raw citizen reports into structured, actionable intelligence using AI.
+
+---
+
+## ⚙️ Features
+
+* 📍 Real-time disaster reporting with location + image
+* 🧠 AI-powered emergency guidance (Google Gemini)
+* ⚠️ Risk classification (High / Medium / Low)
+* 🔍 Duplicate detection & cross-referencing
+* 🗺️ Interactive map visualization
+* 🏥 Nearby help centers with routing
+* 🤖 AI assistant for instant safety advice
+
+---
+
+## 🏗️ Tech Stack
+
+Frontend:
+
+* React (Vite)
+
+Backend:
+
+* Node.js + Express
+
+Database:
+
+* MongoDB Atlas
+
+AI:
+
+* Google Gemini API
+
+Maps:
+
+* OpenStreetMap (Nominatim)
+
+---
+
+## 🌍 SDG Alignment
+
+* SDG 11: Sustainable Cities & Communities
+* SDG 13: Climate Action
+* SDG 3: Good Health & Well-being
+
+---
+
+## 🚀 Setup
+
+### Backend
+
+```bash
+cd backend
+npm install
+node server.js
+```
+
+Create `.env`:
+
+```
+MONGO_URI=your_mongo
+GEMINI_API_KEY=your_key
+```
+
+---
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+---
+
+## 🔥 Impact
+
+ResQAI reduces response time, eliminates duplicate reports, and enables smarter emergency decision-making.
+
+---
+
+## 📌 Future Scope
+
+* Mobile app
+* Government integration
+* Real-time alerts
+* Advanced AI image verification

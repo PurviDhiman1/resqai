@@ -443,54 +443,79 @@ function getResponseStatus(score) {
 function combineAnalysis({ selectedType, textAnalysis, imageAnalysis, hasImage }) {
   const selected = normalizeType(selectedType);
   const textType = textAnalysis.predicted;
-  const imageType = imageAnalysis.predicted;
+  const imageType = normalizeType(imageAnalysis.predicted);
   const reasons = [...textAnalysis.reasons];
 
-  if (hasImage) reasons.push(imageAnalysis.reason || "Image evidence attached");
+  if (hasImage) {
+    reasons.push(imageAnalysis.reason || "Image evidence attached");
+  }
 
   let verificationStatus = "pending";
   let aiMismatchDetected = false;
-  let aiMatchLabel = hasImage ? "Evidence uploaded and queued for review" : "No image evidence submitted";
+  let aiMatchLabel = hasImage
+    ? "Evidence uploaded and queued for review"
+    : "No image evidence submitted";
   let confidenceScore = hasImage ? 68 : 52;
 
-  if (hasImage && imageType !== "Evidence under review" && imageType !== "Unknown") {
+  const imageKnown =
+    hasImage &&
+    imageType !== "Unknown" &&
+    imageType !== "Evidence under review" &&
+    imageType !== "No evidence uploaded";
+
+  // DEMO-SAFE RULE:
+  // If an image is uploaded but AI cannot confidently classify it,
+  // flag it for manual verification instead of showing it as normal.
+  if (hasImage && !imageKnown) {
+    verificationStatus = "suspicious";
+    aiMismatchDetected = true;
+    aiMatchLabel =
+      "Image evidence could not be confidently matched with selected disaster type";
+    confidenceScore = 58;
+    reasons.push("uploaded image requires manual verification");
+  }
+
+  // If image is confidently classified, compare it with selected disaster type.
+  if (imageKnown) {
     if (selected !== "Unknown" && imageType === selected) {
       verificationStatus = "verified";
+      aiMismatchDetected = false;
       aiMatchLabel = "Image matches selected disaster type";
       confidenceScore = 92;
       reasons.push("image evidence matches selected disaster");
-    } else if (textType !== "Unknown" && imageType === textType) {
-      verificationStatus = "verified";
-      aiMatchLabel = "Image matches text-based disaster inference";
-      confidenceScore = 88;
-      reasons.push("text and image analysis agree");
     } else {
       verificationStatus = "suspicious";
       aiMismatchDetected = true;
-      aiMatchLabel = "Possible mismatch between selected disaster and image evidence";
+      aiMatchLabel = `Possible mismatch: user selected ${selected}, but image suggests ${imageType}`;
       confidenceScore = 58;
-      reasons.push("selected type and image evidence do not fully match");
+      reasons.push(
+        `selected type ${selected} does not match image evidence ${imageType}`
+      );
     }
   }
 
   let severityScore = textAnalysis.severityScore;
+
   if (selected === "Fire") severityScore += 10;
   if (selected === "Flood") severityScore += 8;
   if (selected === "Earthquake") severityScore += 12;
   if (selected === "Landslide") severityScore += 10;
-  if (hasImage && imageType !== "Evidence under review") severityScore += 10;
+  if (imageKnown) severityScore += 10;
+  if (aiMismatchDetected) severityScore += 18;
   if (textAnalysis.peopleCount >= 4) severityScore += 10;
 
-  const aiDetectedDisasterType =
-    imageType !== "Evidence under review" && imageType !== "Unknown"
-      ? imageType
-      : textType !== "Unknown"
-      ? textType
-      : selected;
+  const aiDetectedDisasterType = imageKnown
+    ? imageType
+    : textType !== "Unknown"
+    ? textType
+    : selected;
 
   const aiPredictedType = getRiskLabel(severityScore);
   const priorityRank = getPriorityRank(severityScore);
-  const workflowStatus = getWorkflow(severityScore, verificationStatus);
+
+  const workflowStatus = aiMismatchDetected
+    ? "AI Reviewed"
+    : getWorkflow(severityScore, verificationStatus);
 
   return {
     aiPredictedType,
@@ -498,7 +523,9 @@ function combineAnalysis({ selectedType, textAnalysis, imageAnalysis, hasImage }
     aiTextDetectedType: textType,
     aiImageDetectedType: sanitizeImageLabel(imageType, hasImage),
     aiReasonPoints: reasons.filter(Boolean).slice(0, 5),
-    aiReason: reasons.filter(Boolean).slice(0, 5).join("; ") || "Risk estimated from submitted report details.",
+    aiReason:
+      reasons.filter(Boolean).slice(0, 5).join("; ") ||
+      "Risk estimated from submitted report details.",
     aiEvidenceStatus: hasImage ? "Evidence Attached" : "No Evidence",
     aiMatchLabel,
     aiMismatchDetected,
@@ -510,22 +537,24 @@ function combineAnalysis({ selectedType, textAnalysis, imageAnalysis, hasImage }
     priorityRank,
     workflowStatus,
     citizenStatusMessage: `Report received and triaged. Current risk level: ${aiPredictedType}. Workflow: ${workflowStatus}.`,
-    decisionSummary:
-      priorityRank === 1
-        ? "Critical case. Prioritize dispatch, nearest responder routing, and continuous monitoring."
-        : priorityRank === 2
-        ? "High-risk case. Escalate to authority and verify fast."
-        : priorityRank === 3
-        ? "Moderate risk. Verify and monitor response conditions."
-        : "Low-risk report. Keep under monitoring queue.",
-    adminDecision:
-      priorityRank === 1
-        ? "Dispatch Team"
-        : priorityRank === 2
-        ? "Escalate to Authority"
-        : priorityRank === 3
-        ? "Verify and Monitor"
-        : "Monitor"
+    decisionSummary: aiMismatchDetected
+      ? "Evidence mismatch detected. Flag for admin verification before dispatch."
+      : priorityRank === 1
+      ? "Critical case. Prioritize dispatch, nearest responder routing, and continuous monitoring."
+      : priorityRank === 2
+      ? "High-risk case. Escalate to authority and verify fast."
+      : priorityRank === 3
+      ? "Moderate risk. Verify and monitor response conditions."
+      : "Low-risk report. Keep under monitoring queue.",
+    adminDecision: aiMismatchDetected
+      ? "Manual Verification Required"
+      : priorityRank === 1
+      ? "Dispatch Team"
+      : priorityRank === 2
+      ? "Escalate to Authority"
+      : priorityRank === 3
+      ? "Verify and Monitor"
+      : "Monitor"
   };
 }
 

@@ -17,7 +17,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png"
 });
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "https://resqai-backend-x7x2.onrender.com";
 
 const PHONE = {
   hospital: "102",
@@ -1328,14 +1328,17 @@ const styles = {
     fontSize: "clamp(42px, 7vw, 86px)",
     lineHeight: 1,
     margin: "24px 0",
-    letterSpacing: "-3px"
+    letterSpacing: "-3px",
+  
+    color: "#ffffff",
+    textShadow: "0 4px 20px rgba(0,0,0,0.6)"
   },
   heroSubtitle: {
     maxWidth: 850,
     margin: "0 auto",
     fontSize: 19,
     lineHeight: 1.7,
-    color: "#d8e8f5"
+    color: "#eaf6ff"   // brighter
   },
   sdgRibbon: {
     display: "inline-block",

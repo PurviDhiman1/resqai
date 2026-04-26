@@ -1086,11 +1086,11 @@ ${base}`;
               Real geocoded emergency reports with disaster-specific markers.
             </p>
             <div style={styles.mapLegend}>
-  <span><b style={{ background: "#ff3b30" }}></b> Fire</span>
-  <span><b style={{ background: "#00aaff" }}></b> Flood</span>
-  <span><b style={{ background: "#ffcc00" }}></b> Earthquake</span>
-  <span><b style={{ background: "#8b5cf6" }}></b> Landslide</span>
-  <span><b style={{ background: "#22c55e" }}></b> Other</span>
+  <span style={styles.legendItem}><b style={{ ...styles.mapLegendDot, background: "#ef4444" }} /> Fire</span>
+  <span style={styles.legendItem}><b style={{ ...styles.mapLegendDot, background: "#38bdf8" }} /> Flood</span>
+  <span style={styles.legendItem}><b style={{ ...styles.mapLegendDot, background: "#facc15" }} /> Earthquake</span>
+  <span style={styles.legendItem}><b style={{ ...styles.mapLegendDot, background: "#a78bfa" }} /> Landslide</span>
+  <span style={styles.legendItem}><b style={{ ...styles.mapLegendDot, background: "#22c55e" }} /> Other</span>
 </div>
 
             <div style={styles.mapBox}>
@@ -1306,25 +1306,25 @@ const styles = {
     pointerEvents: "none"
   },
   navbar: {
-    position: "sticky",
-    top: 0,
-    zIndex: 50,
+    height: "76px",
+    padding: "0 7%",
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
-    padding: "20px 7%",
-    ...glass
+    background: "rgba(8, 18, 35, 0.92)",
+    borderBottom: "1px solid rgba(103, 232, 249, 0.18)"
+  },
+  
+  logoImage: {
+    width: "58px",
+    height: "58px",
+    objectFit: "contain",
+    borderRadius: "12px"
   },
   logoWrap: {
     display: "flex",
     alignItems: "center",
     gap: "10px"
-  },
-  logoImage: {
-    width: "86px",
-    height: "86px",
-    objectFit: "contain",
-    borderRadius: "14px"
   },
   navLinks: {
     display: "flex",
@@ -1585,12 +1585,27 @@ const styles = {
   mapLegend: {
     display: "flex",
     justifyContent: "center",
-    gap: "16px",
+    alignItems: "center",
+    gap: "18px",
     flexWrap: "wrap",
-    margin: "12px auto 22px",
-    color: "#dbeafe",
+    margin: "8px auto 28px",
+    color: "#e2e8f0",
     fontSize: "14px",
-    fontWeight: 700
+    fontWeight: 800
+  },
+  
+  legendItem: {
+    display: "inline-flex",
+    alignItems: "center",
+    gap: "6px"
+  },
+  
+  mapLegendDot: {
+    width: "12px",
+    height: "12px",
+    borderRadius: "50%",
+    display: "inline-block",
+    boxShadow: "0 0 12px rgba(255,255,255,0.35)"
   },
   mapLegendDot: {
     width: "12px",
@@ -1841,12 +1856,20 @@ const styles = {
     color: "#cbdce9"
   },
   sectionTitle: {
-    color: "#ffffff",
+    fontSize: "46px",
+    color: "#f8fafc",
     textAlign: "center",
-    marginBottom: 20,
-    textShadow: "0 2px 10px rgba(0,0,0,0.5)",
-    fontSize: "28px",
-    fontWeight: "600"
+    margin: "0 0 14px",
+    lineHeight: 1.12,
+    fontWeight: 900
+  },
+  
+  sectionSubtitle: {
+    color: "#cbd5e1",
+    textAlign: "center",
+    fontSize: "17px",
+    margin: "0 0 22px",
+    lineHeight: 1.6
   },
   mapSection: {
     padding: "45px 7%"

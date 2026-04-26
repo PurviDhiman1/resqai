@@ -476,8 +476,23 @@ function combineAnalysis({ selectedType, textAnalysis, imageAnalysis, hasImage }
   }
 
   // If image is confidently classified, compare it with selected disaster type.
-  if (imageKnown) {
-    if (selected !== "Unknown" && imageType === selected) {
+  const normalize = (str) =>
+    (str || "")
+      .toLowerCase()
+      .trim()
+      .replace("disaster", "")
+      .trim();
+  
+  const normalizedSelected = normalize(selected);
+  const normalizedImage = normalize(imageType);
+  
+  // DEBUG (remove later)
+  console.log("Selected:", selected);
+  console.log("Image:", imageType);
+  console.log("Normalized:", normalizedSelected, normalizedImage);
+  
+  if (imageKnown && normalizedImage) {
+    if (normalizedSelected && normalizedImage === normalizedSelected) {
       verificationStatus = "verified";
       aiMismatchDetected = false;
       aiMatchLabel = "Image matches selected disaster type";
@@ -488,9 +503,7 @@ function combineAnalysis({ selectedType, textAnalysis, imageAnalysis, hasImage }
       aiMismatchDetected = true;
       aiMatchLabel = `Possible mismatch: user selected ${selected}, but image suggests ${imageType}`;
       confidenceScore = 58;
-      reasons.push(
-        `selected type ${selected} does not match image evidence ${imageType}`
-      );
+      reasons.push(`selected type ${selected} does not match image evidence ${imageType}`);
     }
   }
 

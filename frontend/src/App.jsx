@@ -1016,7 +1016,12 @@ ${base}`;
                     </div>
 
                     <div style={styles.analysisBox}>
-                      <p><strong>Detected:</strong> {safeText(report.aiDetectedDisasterType, report.disasterType)}</p>
+                    <p>
+  <strong>Detected:</strong>{" "}
+  {report.aiDetectedDisasterType && report.aiDetectedDisasterType !== "Unknown"
+    ? report.aiDetectedDisasterType
+    : report.disasterType}
+</p>
                       <p><strong>Image:</strong> {safeText(report.aiImageDetectedType, report.imageUrl ? "Evidence under review" : "No evidence uploaded")}</p>
                       <p><strong>Confidence:</strong> {report.confidenceScore ?? 0}%</p>
                       <p><strong>Priority Rank:</strong> P{report.priorityRank || 4}</p>
@@ -1492,10 +1497,6 @@ const styles = {
     borderRadius: 30,
     padding: 30
   },
-  formTitle: {
-    fontSize: 34,
-    marginTop: 0
-  },
   formBanner: {
     padding: 14,
     borderRadius: 16,
@@ -1891,9 +1892,6 @@ const styles = {
     color: "white",
     fontSize: 26,
     cursor: "pointer"
-  },
-  formTitle: {
-    color: "#ffffff"
   },
   aiText: {
     whiteSpace: "pre-wrap",

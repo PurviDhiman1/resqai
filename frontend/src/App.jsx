@@ -1313,7 +1313,9 @@ const styles = {
   },
   hero: {
     textAlign: "center",
-    padding: "90px 7% 35px"
+    padding: "90px 7% 35px",
+    position: "relative",
+    zIndex: 2
   },
   badge: {
     display: "inline-block",

@@ -497,7 +497,9 @@ ${base}`;
 
     try {
       const currentReports = reports.length ? reports : await fetchReports();
-      const latest = currentReports?.[0];
+      const latest = [...currentReports].sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      )[0];
 
       if (!latest) {
         showToast("No reports found yet");
@@ -711,7 +713,9 @@ ${base}`;
         <div style={styles.overlay} />
 
         <nav style={styles.navbar}>
-          <div style={styles.logo}>ResQAI</div>
+        <div style={styles.logoWrap}>
+  <img src="/logo.png" alt="ResQAI Logo" style={styles.logoImg} />
+</div>
 
           <div style={styles.navLinks}>
             <button style={styles.navLink} onClick={() => {
@@ -1256,6 +1260,8 @@ function Modal({ title, children, onClose }) {
 const globalCss = `
   * { box-sizing: border-box; }
   body { margin: 0; background: #050816; color: white; font-family: Inter, system-ui, Arial, sans-serif; }
+  h1, h2, h3, h4, h5, h6 {
+  color: #ffffff !important; }
   button, input, textarea, select { font-family: inherit; }
   input::placeholder, textarea::placeholder { color: rgba(230,240,255,.55); }
   select option { color: #111827; }
@@ -1292,11 +1298,16 @@ const styles = {
     padding: "20px 7%",
     ...glass
   },
-  logo: {
-    fontSize: 28,
-    fontWeight: 900,
-    letterSpacing: "-1px",
-    color: "#8fe9ff"
+  logoWrap: {
+    display: "flex",
+    alignItems: "center",
+    gap: "10px"
+  },
+  
+  logoImg: {
+    height: "40px",
+    objectFit: "contain",
+    filter: "drop-shadow(0 0 8px rgba(59,130,246,0.4))"
   },
   navLinks: {
     display: "flex",
@@ -1310,6 +1321,10 @@ const styles = {
     cursor: "pointer",
     fontWeight: 700,
     fontSize: 15
+  },
+  heading: {
+    color: "#ffffff",
+    textShadow: "0 2px 12px rgba(0,0,0,0.6)"
   },
   hero: {
     textAlign: "center",
@@ -1333,14 +1348,17 @@ const styles = {
     letterSpacing: "-3px",
   
     color: "#ffffff",
-    textShadow: "0 4px 20px rgba(0,0,0,0.6)"
+    textShadow: "0 6px 30px rgba(0,0,0,0.8)",
+    background: "linear-gradient(90deg, #7dd3fc, #a78bfa)",
+  WebkitBackgroundClip: "text",
+  WebkitTextFillColor: "transparent"
   },
   heroSubtitle: {
     maxWidth: 850,
     margin: "0 auto",
     fontSize: 19,
     lineHeight: 1.7,
-    color: "#eaf6ff"   // brighter
+    color: "#cfe9ff"
   },
   sdgRibbon: {
     display: "inline-block",
@@ -1429,20 +1447,30 @@ const styles = {
     padding: "0 7%"
   },
   card: {
-    ...glass,
-    borderRadius: 28,
-    padding: 28
+    background: "rgba(255,255,255,0.05)",
+    border: "1px solid rgba(255,255,255,0.1)",
+    backdropFilter: "blur(12px)",
+    borderRadius: 20,
+    padding: 24,
+    color: "#ffffff"
+  },
+  logo: {
+    fontSize: "22px",
+    fontWeight: "700",
+    letterSpacing: "1px",
+    color: "#e6f1ff"
   },
   icon: {
     fontSize: 36
   },
   cardTitle: {
     fontSize: 24,
-    marginBottom: 10
+    marginBottom: 10,
+    color: "#ffffff",
+    textShadow: "0 2px 12px rgba(0,0,0,0.65)"
   },
   cardText: {
-    color: "#c9d8e5",
-    lineHeight: 1.6
+    color: "#cfe9ff"
   },
   cardButton: {
     marginTop: 18,
@@ -1549,7 +1577,10 @@ const styles = {
   },
   dashboardTitle: {
     fontSize: "clamp(34px, 5vw, 58px)",
-    margin: 0
+    margin: 0,
+    color: "#ffffff",
+    textAlign: "center",
+    textShadow: "0 4px 22px rgba(0,0,0,0.75)"
   },
   dashboardSubtitle: {
     color: "#cbdce9",
@@ -1658,6 +1689,13 @@ const styles = {
     borderRadius: 28,
     padding: 22
   },
+  formTitle: {
+    fontSize: 34,
+    marginTop: 0,
+    color: "#ffffff",
+    textAlign: "center",
+    textShadow: "0 2px 14px rgba(0,0,0,0.7)"
+  },
   topBadgeRow: {
     display: "flex",
     gap: 10,
@@ -1690,7 +1728,8 @@ const styles = {
   },
   reportName: {
     fontSize: 23,
-    marginBottom: 10
+    marginBottom: 10,
+    color: "#ffffff"
   },
   compactInfo: {
     color: "#d7e7f2",
@@ -1771,6 +1810,14 @@ const styles = {
   emptyText: {
     color: "#cbdce9"
   },
+  sectionTitle: {
+    color: "#ffffff",
+    textAlign: "center",
+    marginBottom: 20,
+    textShadow: "0 2px 10px rgba(0,0,0,0.5)",
+    fontSize: "28px",
+    fontWeight: "600"
+  },
   mapSection: {
     padding: "45px 7%"
   },
@@ -1844,6 +1891,9 @@ const styles = {
     color: "white",
     fontSize: 26,
     cursor: "pointer"
+  },
+  formTitle: {
+    color: "#ffffff"
   },
   aiText: {
     whiteSpace: "pre-wrap",

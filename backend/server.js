@@ -505,6 +505,13 @@ function combineAnalysis({ selectedType, textAnalysis, imageAnalysis, hasImage }
       confidenceScore = 58;
       reasons.push(`selected type ${selected} does not match image evidence ${imageType}`);
     }
+  } else {
+    verificationStatus = "pending";
+    aiMismatchDetected = false;
+    aiMatchLabel = hasImage
+      ? "Evidence uploaded and queued for review"
+      : "No image evidence submitted";
+    confidenceScore = hasImage ? 68 : 52;
   }
 
   let severityScore = textAnalysis.severityScore;

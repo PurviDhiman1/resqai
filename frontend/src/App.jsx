@@ -1320,11 +1320,11 @@ const styles = {
     alignItems: "center",
     gap: "10px"
   },
-  
-  logoImg: {
-    height: "40px",
+  logoImage: {
+    width: "86px",
+    height: "86px",
     objectFit: "contain",
-    filter: "drop-shadow(0 0 8px rgba(59,130,246,0.4))"
+    borderRadius: "14px"
   },
   navLinks: {
     display: "flex",

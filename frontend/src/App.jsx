@@ -110,11 +110,13 @@ Incident needs assessment, stabilization, and controlled response.`
 };
 
 function getDisasterColor(type) {
-  if (type === "Fire") return "#ff4d4f";
-  if (type === "Flood") return "#3db8ff";
-  if (type === "Earthquake") return "#ff9f43";
-  if (type === "Landslide") return "#2ecc71";
-  return "#b084ff";
+  const t = (type || "").toLowerCase().trim();
+
+  if (t === "fire") return "#ef4444";
+  if (t === "flood") return "#38bdf8";
+  if (t === "earthquake") return "#facc15";
+  if (t === "landslide") return "#a78bfa";
+  return "#22c55e";
 }
 
 function getRiskColor(risk) {
@@ -1103,11 +1105,13 @@ ${base}`;
                 <FitMapToReports reports={validReports} />
 
                 {validReports.map(report => (
-                  <Marker
-                    key={report._id}
-                    position={[report.latitude, report.longitude]}
-                    icon={getCustomIcon(report.disasterType)}
-                  >
+  <Marker
+    key={report._id}
+    position={[Number(report.latitude), Number(report.longitude)]}
+    icon={getCustomIcon(
+      report.disasterType || report.aiDetectedDisasterType || "Other"
+    )}
+  >
                     <Popup>
                       <strong>{report.disasterType}</strong><br />
                       {report.name}<br />
@@ -1606,13 +1610,6 @@ const styles = {
     borderRadius: "50%",
     display: "inline-block",
     boxShadow: "0 0 12px rgba(255,255,255,0.35)"
-  },
-  mapLegendDot: {
-    width: "12px",
-    height: "12px",
-    borderRadius: "50%",
-    display: "inline-block",
-    marginRight: "6px"
   },
   dashboardSection: {
     padding: "45px 7%"

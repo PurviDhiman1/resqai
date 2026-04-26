@@ -714,7 +714,8 @@ ${base}`;
 
         <nav style={styles.navbar}>
         <div style={styles.logoWrap}>
-  <img src="/logo.png" alt="ResQAI Logo" style={styles.logoImg} />
+        <img src="/resqai-logo.png" alt="ResQAI Logo" style={styles.logoImage} />
+  
 </div>
 
           <div style={styles.navLinks}>
@@ -1084,6 +1085,13 @@ ${base}`;
             <p style={styles.dashboardSubtitle}>
               Real geocoded emergency reports with disaster-specific markers.
             </p>
+            <div style={styles.mapLegend}>
+  <span><b style={{ background: "#ff3b30" }}></b> Fire</span>
+  <span><b style={{ background: "#00aaff" }}></b> Flood</span>
+  <span><b style={{ background: "#ffcc00" }}></b> Earthquake</span>
+  <span><b style={{ background: "#8b5cf6" }}></b> Landslide</span>
+  <span><b style={{ background: "#22c55e" }}></b> Other</span>
+</div>
 
             <div style={styles.mapBox}>
               <MapContainer center={[28.6139, 77.209]} zoom={5} style={{ height: "100%", width: "100%" }}>
@@ -1573,6 +1581,23 @@ const styles = {
     color: "#06111f",
     fontWeight: 900,
     cursor: "pointer"
+  },
+  mapLegend: {
+    display: "flex",
+    justifyContent: "center",
+    gap: "16px",
+    flexWrap: "wrap",
+    margin: "12px auto 22px",
+    color: "#dbeafe",
+    fontSize: "14px",
+    fontWeight: 700
+  },
+  mapLegendDot: {
+    width: "12px",
+    height: "12px",
+    borderRadius: "50%",
+    display: "inline-block",
+    marginRight: "6px"
   },
   dashboardSection: {
     padding: "45px 7%"

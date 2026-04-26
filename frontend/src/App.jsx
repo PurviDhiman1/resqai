@@ -990,7 +990,9 @@ ${base}`;
                 return (
                   <div key={report._id} style={styles.reportCard}>
                     <div style={styles.topBadgeRow}>
-                      <StatusBadge status={report.verificationStatus} />
+                    <StatusBadge
+  status={report.workflowStatus === "Verified" ? "verified" : report.verificationStatus}
+/>
                       <span style={{ ...styles.typeBadge, background: getDisasterColor(report.disasterType) }}>
                         {report.disasterType}
                       </span>
@@ -1027,11 +1029,13 @@ ${base}`;
                       <p><strong>Priority Rank:</strong> P{report.priorityRank || 4}</p>
                     </div>
 
-                    {report.aiMismatchDetected ? (
-                      <div style={styles.mismatchBadge}>⚠️ Evidence mismatch flagged</div>
-                    ) : (
-                      <div style={styles.matchBadgeGreen}>✓ {safeText(report.aiMatchLabel, "Evidence status reviewed")}</div>
-                    )}
+                    {report.aiMismatchDetected && report.workflowStatus !== "Verified" ? (
+  <div style={styles.mismatchBadge}>⚠️ Evidence mismatch flagged</div>
+) : (
+  <div style={styles.matchBadgeGreen}>
+    ✓ {report.workflowStatus === "Verified" ? "Manually verified by admin" : safeText(report.aiMatchLabel, "Evidence status reviewed")}
+  </div>
+)}
 
                     <p style={styles.reasonText}>
                       {safeText(report.decisionSummary || report.aiReason, "Risk estimated from submitted report details.")}

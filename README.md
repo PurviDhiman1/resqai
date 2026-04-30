@@ -75,15 +75,6 @@ npm install
 node server.js
 ```
 
-Create `.env`:
-
-```
-MONGO_URI=your_mongo
-GEMINI_API_KEY=your_key
-```
-
----
-
 ### Frontend
 
 ```bash
